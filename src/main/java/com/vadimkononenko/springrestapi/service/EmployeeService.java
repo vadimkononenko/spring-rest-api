@@ -17,7 +17,9 @@ public interface EmployeeService {
 
     List<Employee> getEmployeesByName(String name);
 
-    List<Employee> getEmployeeByNameAndLocation(String name, String location);
+    List<Employee> getEmployeesByNameAndLocation(String name, String location);
 
     List<Employee> getEmployeeByKeyword(String name);
+
+    List<Employee> getEmployeesByNameOrLocation(String name, String location);
 }

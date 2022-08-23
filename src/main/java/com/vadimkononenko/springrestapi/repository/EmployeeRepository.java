@@ -2,6 +2,7 @@ package com.vadimkononenko.springrestapi.repository;
 
 import com.vadimkononenko.springrestapi.model.Employee;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,4 +16,7 @@ public interface EmployeeRepository extends PagingAndSortingRepository<Employee,
 
     // SELECT * FROM table WHERE name LIKE "%<pattern>%"
     List<Employee> findByNameContaining(String keyword, Sort sort);
+
+    @Query("from Employee where name = :name or location = :location")
+    List<Employee> getEmployeesByNameOrLocation(String name, String location);
 }

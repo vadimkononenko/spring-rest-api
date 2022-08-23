@@ -52,7 +52,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
-    public List<Employee> getEmployeeByNameAndLocation(String name, String location) {
+    public List<Employee> getEmployeesByNameAndLocation(String name, String location) {
         return employeeRepository.findByNameAndLocation(name, location);
     }
 
@@ -60,5 +60,10 @@ public class EmployeeServiceImpl implements EmployeeService{
     public List<Employee> getEmployeeByKeyword(String name) {
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
         return employeeRepository.findByNameContaining(name, sort);
+    }
+
+    @Override
+    public List<Employee> getEmployeesByNameOrLocation(String name, String location) {
+        return employeeRepository.getEmployeesByNameOrLocation(name, location);
     }
 }
