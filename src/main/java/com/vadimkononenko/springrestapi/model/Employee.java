@@ -2,6 +2,7 @@ package com.vadimkononenko.springrestapi.model;
 
 import com.vadimkononenko.springrestapi.request.EmployeeRequest;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -12,6 +13,7 @@ import javax.persistence.*;
 @ToString
 @Entity
 @Table(name = "tbl_employee")
+@NoArgsConstructor
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +29,4 @@ public class Employee {
         this.name = req.getName();
     }
 
-    public Employee() {
-
-    }
 }

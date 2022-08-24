@@ -65,4 +65,9 @@ public class EmployeeController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @GetMapping("/employees/filter/{name}")
+    public ResponseEntity<List<Employee>> getEmployeesByDepartment(@PathVariable String name) {
+        return new ResponseEntity<>(employeeRepository.findByDepartmentName(name), HttpStatus.OK);
+    }
+
 }
