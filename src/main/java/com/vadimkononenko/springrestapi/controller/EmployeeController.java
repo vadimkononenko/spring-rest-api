@@ -1,6 +1,10 @@
 package com.vadimkononenko.springrestapi.controller;
 
+import com.vadimkononenko.springrestapi.model.Department;
 import com.vadimkononenko.springrestapi.model.Employee;
+import com.vadimkononenko.springrestapi.repository.DepartmentRepository;
+import com.vadimkononenko.springrestapi.repository.EmployeeRepository;
+import com.vadimkononenko.springrestapi.request.EmployeeRequest;
 import com.vadimkononenko.springrestapi.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +20,12 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private DepartmentRepository departmentRepository;
+
     @GetMapping("/employees")
     public ResponseEntity<List<Employee>> getEmployees(
             @RequestParam Integer pageNumber,
@@ -29,8 +39,16 @@ public class EmployeeController {
     }
 
     @PostMapping("/employees")
-    public ResponseEntity<Employee> saveEmployee(@Valid @RequestBody Employee employee) {
-        return new ResponseEntity<>(employeeService.saveEmployee(employee), HttpStatus.CREATED);
+    public ResponseEntity<Employee> saveEmployee(@Valid @RequestBody EmployeeRequest eRequest) {
+        Department department = new Department();
+        department.setName(eRequest.getDepartment());
+        department = departmentRepository.save(department);
+
+        Employee employee = new Employee(eRequest);
+        employee.setDepartment(department);
+        employee = employeeRepository.save(employee);
+
+        return new ResponseEntity<>(employee, HttpStatus.CREATED);
     }
 
     @PutMapping("/employees/{id}")
@@ -45,35 +63,6 @@ public class EmployeeController {
     public ResponseEntity<HttpStatus> deleteEmployee(@RequestParam Long id) {
         employeeService.deleteEmployeeById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @GetMapping("/employees/filterByName")
-    public ResponseEntity<List<Employee>> getEmployeesByName(@RequestParam String name) {
-        return new ResponseEntity<>(employeeService.getEmployeesByName(name), HttpStatus.OK);
-    }
-
-    @GetMapping("/employees/filterByNameAndLocation")
-    public ResponseEntity<List<Employee>> getEmployeesByNameAndLocation(
-            @RequestParam String name,
-            @RequestParam String location) {
-        return new ResponseEntity<>(employeeService.getEmployeesByNameAndLocation(name, location), HttpStatus.OK);
-    }
-
-    @GetMapping("employees/filterByKeyword")
-    public ResponseEntity<List<Employee>> getEmployeesByKeyword(@RequestParam String name){
-        return new ResponseEntity<>(employeeService.getEmployeeByKeyword(name), HttpStatus.OK);
-    }
-
-    @GetMapping("employees/{name}/{location}")
-    public ResponseEntity<List<Employee>> getEmployeesByNameOrLocation(
-            @PathVariable String name,
-            @PathVariable String location) {
-        return new ResponseEntity<>(employeeService.getEmployeesByNameOrLocation(name, location), HttpStatus.OK);
-    }
-
-    @DeleteMapping("employees/delete/{name}")
-    public ResponseEntity<String> deleteEmployeeByName(@PathVariable String name) {
-        return new ResponseEntity<>(employeeService.deleteByEmployeeName(name) + " records deleted", HttpStatus.OK);
     }
 
 }

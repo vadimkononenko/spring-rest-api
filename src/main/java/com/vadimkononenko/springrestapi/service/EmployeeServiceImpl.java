@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class EmployeeServiceImpl implements EmployeeService{
+public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
     private EmployeeRepository employeeRepository;
@@ -46,29 +46,4 @@ public class EmployeeServiceImpl implements EmployeeService{
         return employeeRepository.save(employee);
     }
 
-    @Override
-    public List<Employee> getEmployeesByName(String name) {
-        return employeeRepository.findByName(name);
-    }
-
-    @Override
-    public List<Employee> getEmployeesByNameAndLocation(String name, String location) {
-        return employeeRepository.findByNameAndLocation(name, location);
-    }
-
-    @Override
-    public List<Employee> getEmployeeByKeyword(String name) {
-        Sort sort = Sort.by(Sort.Direction.DESC, "id");
-        return employeeRepository.findByNameContaining(name, sort);
-    }
-
-    @Override
-    public List<Employee> getEmployeesByNameOrLocation(String name, String location) {
-        return employeeRepository.getEmployeesByNameOrLocation(name, location);
-    }
-
-    @Override
-    public Integer deleteByEmployeeName(String name) {
-        return employeeRepository.deleteEmployeeByName(name);
-    }
 }

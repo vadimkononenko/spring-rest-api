@@ -1,15 +1,11 @@
 package com.vadimkononenko.springrestapi.model;
 
+import com.vadimkononenko.springrestapi.request.EmployeeRequest;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import java.util.Date;
 
 @Setter
 @Getter
@@ -21,24 +17,17 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Name should not be null")
     private String name;
 
-    private Integer age = 0;
+    @JoinColumn(name = "department_id")
+    @OneToOne
+    private Department department;
 
-    private String location;
+    public Employee(EmployeeRequest req) {
+        this.name = req.getName();
+    }
 
-    @Email(message = "Enter correct email")
-    private String email;
+    public Employee() {
 
-    @NotBlank(message = "Department should not be null")
-    private String department;
-
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private Date createdAt;
-
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    private Date updatedAt;
+    }
 }
