@@ -71,4 +71,9 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeService.getEmployeesByNameOrLocation(name, location), HttpStatus.OK);
     }
 
+    @DeleteMapping("employees/delete/{name}")
+    public ResponseEntity<String> deleteEmployeeByName(@PathVariable String name) {
+        return new ResponseEntity<>(employeeService.deleteByEmployeeName(name) + " records deleted", HttpStatus.OK);
+    }
+
 }

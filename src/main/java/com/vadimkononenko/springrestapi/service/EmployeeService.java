@@ -22,4 +22,6 @@ public interface EmployeeService {
     List<Employee> getEmployeeByKeyword(String name);
 
     List<Employee> getEmployeesByNameOrLocation(String name, String location);
+
+    Integer deleteByEmployeeName(String name);
 }
