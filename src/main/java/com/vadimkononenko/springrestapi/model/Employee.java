@@ -21,10 +21,6 @@ public class Employee {
 
     private String name;
 
-    @JoinColumn(name = "department_id")
-    @OneToOne
-    private Department department;
-
     public Employee(EmployeeRequest req) {
         this.name = req.getName();
     }
