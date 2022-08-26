@@ -1,72 +1,34 @@
 package com.vadimkononenko.springrestapi.controller;
 
-import com.vadimkononenko.springrestapi.model.Department;
+import com.vadimkononenko.springrestapi.dao.EmployeeDAOImplementation;
 import com.vadimkononenko.springrestapi.model.Employee;
-import com.vadimkononenko.springrestapi.repository.DepartmentRepository;
 import com.vadimkononenko.springrestapi.repository.EmployeeRepository;
-import com.vadimkononenko.springrestapi.request.EmployeeRequest;
-import com.vadimkononenko.springrestapi.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 public class EmployeeController {
 
     @Autowired
-    private EmployeeService employeeService;
-
-    @Autowired
     private EmployeeRepository employeeRepository;
 
     @Autowired
-    private DepartmentRepository departmentRepository;
-
-    @GetMapping("/employees")
-    public ResponseEntity<List<Employee>> getEmployees(
-            @RequestParam Integer pageNumber,
-            @RequestParam Integer pageSize) {
-        return new ResponseEntity<>(employeeService.getEmployees(pageNumber, pageSize), HttpStatus.OK);
-    }
-
-    @GetMapping("/employees/{id}")
-    public ResponseEntity<Employee> getEmployee(@PathVariable Long id) {
-        return new ResponseEntity<>(employeeService.getEmployeeById(id), HttpStatus.OK);
-    }
+    private EmployeeDAOImplementation eDAO;
 
     @PostMapping("/employees")
-    public ResponseEntity<String> saveEmployee(@Valid @RequestBody EmployeeRequest eRequest) {
-
-        Employee employee = new Employee(eRequest);
-        employee = employeeRepository.save(employee);
-
-        for (String s : eRequest.getDepartment()) {
-            Department d = new Department();
-            d.setName(s);
-            d.setEmployee(employee);
-
-            departmentRepository.save(d);
-        }
-
-        return new ResponseEntity<>("Record saved successfully", HttpStatus.CREATED);
+    public Employee saveEmployee(@RequestBody Employee employee) {
+        return employeeRepository.save(employee);
     }
 
-    @PutMapping("/employees/{id}")
-    public ResponseEntity<Employee> updateEmployee(
-            @PathVariable Long id,
-            @RequestBody Employee employee) {
-        employee.setId(id);
-        return new ResponseEntity<>(employeeService.updateEmployee(employee), HttpStatus.OK);
-    }
-
-    @DeleteMapping("/employees")
-    public ResponseEntity<HttpStatus> deleteEmployee(@RequestParam Long id) {
-        employeeService.deleteEmployeeById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    @GetMapping("/employees")
+    public List<Employee> getEmployees() {
+//        return employeeRepository.getEmployees();
+        return eDAO.getAll();
     }
 
 }

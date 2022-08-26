@@ -1,6 +1,5 @@
 package com.vadimkononenko.springrestapi.model;
 
-import com.vadimkononenko.springrestapi.request.EmployeeRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,15 +13,17 @@ import javax.persistence.*;
 @Entity
 @Table(name = "tbl_employee")
 @NoArgsConstructor
+@NamedNativeQuery(name = "getAllRecords",
+        query = "select * from tbl_employee",
+        resultClass = Employee.class)
 public class Employee {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
 
-    public Employee(EmployeeRequest req) {
-        this.name = req.getName();
-    }
+    private String location;
 
 }
